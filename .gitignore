@@ -1,4 +1,2 @@
-./badada_backend/*.pvc
-./badada/*.pvc
-./badada_backend/__pycache__
-./badada/__pycache__
+*.pyc
+__pycache__/
