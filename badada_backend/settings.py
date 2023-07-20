@@ -30,7 +30,6 @@ SECRET_KEY = 'django-insecure-0x@uio9zw6pwawn=82eky3ga)p2(ipmzpmo7chpmx4xowl9d_s
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-FORCE_SCRIPT_NAME = '/badada/'
 
 # Application definition
 
