@@ -11,7 +11,14 @@ def print(request):
 
 
 @api_view(['GET'])
-def question_read(request):
+def question(request):
     data = Question.objects.all()
+    serializer = TestDataSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def answer(request):
+    data = Answer.objects.all()
     serializer = TestDataSerializer(data, many=True)
     return Response(serializer.data)

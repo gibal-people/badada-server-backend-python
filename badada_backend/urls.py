@@ -22,5 +22,6 @@ import badada.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('question/', badada.views.question_read),
+    path('question/', badada.views.question),
+    path('answer/', badada.views.answer),
 ]
