@@ -3,12 +3,12 @@ from .models import *
 
 
 
-class TestDataSerializer(ModelSerializer):
+class QuestionSerializer(ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
 
-class TestDataSerializer(ModelSerializer):
+class AnswerSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = '__all__'
