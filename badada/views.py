@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
+import json
 
 
 
@@ -26,20 +27,63 @@ def answer(request):
 # 상위 몇프로
 # request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
 # 전체 유저수, 퍼센트, (?바다?) response
+@api_view(['GET'])
 def mbti_distribution(request, mbti):
     if mbti == "all":
         mbti_data = MbtiCnt.objects.all()
         user_data = UserCnt.objects.all()
+        mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
+        user_serializer = UserCntSerializer(user_data, many=True)
+      
+        total_user_cnt = user_serializer.data[0]['total_user_cnt']
+
+        
+        return Response(mbti_serializer.data)
+
+
     else:
         mbti_data = MbtiCnt.objects.filter(mbti=mbti)
         user_data = UserCnt.objects.all()
+        mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
+        user_serializer = UserCntSerializer(user_data, many=True)
+        
+        mbti_cnt = mbti_serializer.data[0]['mbti_cnt']
+        total_user_cnt = user_serializer.data[0]['total_user_cnt']
+
+        mbti_percent = round((mbti_cnt/total_user_cnt) * 100, 1)
+        
+        
+        mbti_distribution = {}  # 없어도 되는지 확인
+        mbti_distribution["mbti_percent"] = mbti_percent
+        
+        json_mbti_distribution = json.loads(mbti_distribution)
+        
+        print(type(user_serializer.data))
+
+        return Response(mbti_serializer.data)
 
 
 
-    
+# def mbti_distribution(mbti):
+#     if mbti == "all":
+#         mbti_data = MbtiCnt.objects.all()
+#         user_data = UserCnt.objects.all()
+#         mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
+#         user_serializer = UserCntSerializer(user_data, many=True)
+
+#         total_user_cnt = user_serializer.data[0]['total_user_cnt']
+
+#     else:
+#         mbti_data = MbtiCnt.objects.filter(mbti=mbti)
+#         user_data = UserCnt.objects.all()
+#         mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
+#         user_serializer = UserCntSerializer(user_data, many=True)
+        
+#         total_user_cnt = user_serializer.data[0]['total_user_cnt']
+#         print(mbti_serializer)
 
 
-
+# mbti_distribution("ENFJ")
 
 
 
@@ -51,3 +95,4 @@ def mbti_distribution(request, mbti):
 # 결과 바탕으로 mbti_cnt, user_cnt UPDATE
 # 피드백 받을 때 어떤 형식으로 줄건지 (json)
 # 상위 몇프로인지 보여줄 때, 전체 유저수/퍼센트/(?바다?) 정보 ??
+# 상위 몇프로인지 보여줄 때, 모든 MBTI 순위도 보여줄건지
