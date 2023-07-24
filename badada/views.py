@@ -26,7 +26,7 @@ def answer(request):
 
 # 상위 몇프로
 # request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
-# 전체 유저수, 퍼센트, (?바다?) response
+# 바다, 전체 유저수, mbti 누적 수 response
 @api_view(['GET'])
 def mbti_distribution(request, mbti):
     if mbti == "all":
@@ -36,9 +36,16 @@ def mbti_distribution(request, mbti):
         user_serializer = UserCntSerializer(user_data, many=True)
       
         total_user_cnt = user_serializer.data[0]['total_user_cnt']
-
         
-        return Response(mbti_serializer.data)
+        # mbti,mbti_cnt,total_user
+        all_mbti_data = mbti_serializer
+
+        for i in range(len(mbti_serializer.data)):
+            all_mbti_data.data[i]["total_user_cnt"] = user_serializer.data[0]['total_user_cnt']
+
+        return Response(all_mbti_data.data)
+
+
 
 
     else:
@@ -53,37 +60,15 @@ def mbti_distribution(request, mbti):
         mbti_percent = round((mbti_cnt/total_user_cnt) * 100, 1)
         
         
-        mbti_distribution = {}  # 없어도 되는지 확인
+        #mbti_distribution = {}  # 없어도 되는지 확인
+        mbti_distribution["mbti"] = mbit
         mbti_distribution["mbti_percent"] = mbti_percent
-        
-        json_mbti_distribution = json.loads(mbti_distribution)
-        
-        print(type(user_serializer.data))
 
-        return Response(mbti_serializer.data)
+
+        return Response(mbti_distribution)
 
 
 
-# def mbti_distribution(mbti):
-#     if mbti == "all":
-#         mbti_data = MbtiCnt.objects.all()
-#         user_data = UserCnt.objects.all()
-#         mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
-#         user_serializer = UserCntSerializer(user_data, many=True)
-
-#         total_user_cnt = user_serializer.data[0]['total_user_cnt']
-
-#     else:
-#         mbti_data = MbtiCnt.objects.filter(mbti=mbti)
-#         user_data = UserCnt.objects.all()
-#         mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
-#         user_serializer = UserCntSerializer(user_data, many=True)
-        
-#         total_user_cnt = user_serializer.data[0]['total_user_cnt']
-#         print(mbti_serializer)
-
-
-# mbti_distribution("ENFJ")
 
 
 
