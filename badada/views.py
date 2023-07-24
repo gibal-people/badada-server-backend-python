@@ -73,11 +73,29 @@ def mbti_distribution(request, mbti):
 
 
 
+# question_num -> id
+# question_content -> content
+# answer_content -> content
 
-# 상위 몇 프로 (프론트 or 백엔드)
+
+
+# api명 : qna
+# qna안에 question과 answer 합쳐서 넣어주기
+
+
+
+
+# 전체 결과 보기
+# mbti -> 바다 이름
+
+
+
 # 사용자 답변 어떤 형식으로 보내줄지 (프론트 -> 백엔드)
+## 1번 문제의 answer
+
+
 # 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
+
 # 결과 바탕으로 mbti_cnt, user_cnt UPDATE
-# 피드백 받을 때 어떤 형식으로 줄건지 (json)
-# 상위 몇프로인지 보여줄 때, 전체 유저수/퍼센트/(?바다?) 정보 ??
-# 상위 몇프로인지 보여줄 때, 모든 MBTI 순위도 보여줄건지
+
+
