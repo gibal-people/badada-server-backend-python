@@ -44,13 +44,22 @@ jobs:
 
 
   slackNotification:
+
     needs: build
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
-    - name: Slack Notification
+    - name: Slack Notification - Success
+      if: ${{ success() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_USERNAME: sohotco-backend-py
+
+    - name: Slack Notification - Failure
+      if: ${{ failure() }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
