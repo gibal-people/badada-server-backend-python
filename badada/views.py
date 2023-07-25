@@ -7,7 +7,6 @@ from .serializers import *
 
 
 
-
 @api_view(['GET'])
 def question(request):
     data = Question.objects.all()
@@ -29,9 +28,7 @@ def qna(request):
     question_serializer = QuestionSerializer(question_data, many=True)
     answer_serializer = AnswerSerializer(answer_data, many=True)
 
-
     qna_serializer = question_serializer
-
 
     for i in range(len(qna_serializer.data)):
         qna_serializer.data[i]["answer"]= answer_serializer.data[i]
@@ -39,6 +36,21 @@ def qna(request):
 
 
     return Response(qna_serializer.data)
+
+
+
+
+
+# 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
+@api_view(['GET', 'POST'])
+def result(request):
+    if request.method == 'GET':
+        data = request.data
+        print(type(data["answer"][0]))
+        
+        return Response({'success': True})
+
+
 
 
 
@@ -104,15 +116,13 @@ def mbti_distribution(request,mbti):
 
 
 
-# mbti -> 바다 이름
 
 
 
-# 사용자 답변 어떤 형식으로 보내줄지 (프론트 -> 백엔드)
-## 1번 문제의 answer
 
 
-# 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
+
+
 
 # 결과 바탕으로 mbti_cnt, user_cnt UPDATE
 

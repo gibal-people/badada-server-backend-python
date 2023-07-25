@@ -26,4 +26,5 @@ urlpatterns = [
     path('answer/', badada.views.answer),
     path('qna/', badada.views.qna),
     path('mbti_distribution/<str:mbti>/', badada.views.mbti_distribution),
+    path('result/', badada.views.result),
 ]
