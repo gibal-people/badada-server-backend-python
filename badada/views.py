@@ -22,6 +22,28 @@ def answer(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def qna(request):
+    question_data = Question.objects.all()
+    answer_data = Answer.objects.all()
+    question_serializer = QuestionSerializer(question_data, many=True)
+    answer_serializer = AnswerSerializer(answer_data, many=True)
+
+
+    qna_serializer = question_serializer
+
+
+    for i in range(len(qna_serializer.data)):
+        qna_serializer.data[i]["answer"]= answer_serializer.data[i]
+        del qna_serializer.data[i]["answer"]["question_num"]
+
+
+    return Response(qna_serializer.data)
+
+
+
+
+
 
 # 상위 몇프로
 # request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
@@ -43,7 +65,6 @@ def mbti_distribution(request, mbti):
             all_mbti_data.data[i]["total_user_cnt"] = user_serializer.data[0]['total_user_cnt']
 
         return Response(all_mbti_data.data)
-
 
 
 
@@ -70,11 +91,6 @@ def mbti_distribution(request, mbti):
 
 
 
-
-
-# question_num -> id
-# question_content -> content
-# answer_content -> content
 
 
 
