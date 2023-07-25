@@ -45,24 +45,33 @@ def qna(request):
 
 
 
+
+
+
 # 상위 몇프로
 # request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
 # 바다, 전체 유저수, mbti 누적 수 response
 @api_view(['GET'])
-def mbti_distribution(request, mbti):
+def mbti_distribution(request,mbti):
     if mbti == "all":
-        mbti_data = MbtiCnt.objects.all()
+        mbticnt_data = MbtiCnt.objects.all()
         user_data = UserCnt.objects.all()
-        mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
+        mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
         user_serializer = UserCntSerializer(user_data, many=True)
       
-        total_user_cnt = user_serializer.data[0]['total_user_cnt']
         
-        # mbti,mbti_cnt,total_user
-        all_mbti_data = mbti_serializer
+        all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
+        total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
+        
 
-        for i in range(len(mbti_serializer.data)):
+        for i in range(len(mbticnt_serializer.data)):
             all_mbti_data.data[i]["total_user_cnt"] = user_serializer.data[0]['total_user_cnt']
+
+            mbti_data = Mbti.objects.filter(mbti=all_mbti_data.data[i]["mbti"])
+            mbti_serializer = MbtiSerializer(mbti_data, many=True)
+            all_mbti_data.data[i]["beach"] = mbti_serializer.data[0]["beach"]
+
+            del all_mbti_data.data[i]["mbti"]
 
         return Response(all_mbti_data.data)
 
@@ -81,7 +90,7 @@ def mbti_distribution(request, mbti):
         
         
         #mbti_distribution = {}  # 없어도 되는지 확인
-        mbti_distribution["mbti"] = mbit
+        mbti_distribution["mbti"] = mbti
         mbti_distribution["mbti_percent"] = mbti_percent
 
 
@@ -94,13 +103,7 @@ def mbti_distribution(request, mbti):
 
 
 
-# api명 : qna
-# qna안에 question과 answer 합쳐서 넣어주기
 
-
-
-
-# 전체 결과 보기
 # mbti -> 바다 이름
 
 

@@ -22,3 +22,10 @@ class UserCntSerializer(ModelSerializer):
     class Meta:
         model = UserCnt
         fields = '__all__'
+
+
+class MbtiSerializer(ModelSerializer):
+    class Meta:
+        model = Mbti
+        fields = '__all__'
+
