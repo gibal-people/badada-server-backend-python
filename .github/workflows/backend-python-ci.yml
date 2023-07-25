@@ -9,7 +9,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: badada-backend-pys
+  ECR_REPOSITORY: badada-backend-sssss
   APP_IMAGE: badada-backend-py-image
 
 
