@@ -10,7 +10,7 @@ from django.db import models
 
 class Answer(models.Model):
     question_num = models.ForeignKey('Question', models.DO_NOTHING, db_column='question_num', blank=True, null=True)
-    answer_content = models.CharField(max_length=1000, blank=True, null=True)
+    content = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -106,6 +106,7 @@ class AuthUserUserPermissions(models.Model):
 
 class Beach(models.Model):
     beach = models.CharField(primary_key=True, max_length=100)
+    location = models.CharField(max_length=100, blank=True, null=True)
     attribute_1 = models.CharField(max_length=1000, blank=True, null=True)
     attribute_2 = models.CharField(max_length=1000, blank=True, null=True)
     attribute_3 = models.CharField(max_length=1000, blank=True, null=True)
@@ -168,7 +169,6 @@ class DjangoSession(models.Model):
 
 
 class Feedback(models.Model):
-    id = models.CharField(primary_key=True, max_length=100)
     good = models.IntegerField(blank=True, null=True)
     bad = models.IntegerField(blank=True, null=True)
     good_1 = models.IntegerField(blank=True, null=True)
@@ -193,7 +193,6 @@ class Feedback(models.Model):
 class Mbti(models.Model):
     mbti = models.CharField(primary_key=True, max_length=4)
     beach = models.ForeignKey(Beach, models.DO_NOTHING, db_column='beach', blank=True, null=True)
-    good_mbti = models.CharField(max_length=4, blank=True, null=True)
     bad_mbti = models.CharField(max_length=4, blank=True, null=True)
 
     class Meta:
@@ -213,8 +212,8 @@ class MbtiCnt(models.Model):
 
 
 class Question(models.Model):
-    question_num = models.IntegerField(primary_key=True)
-    question_content = models.CharField(max_length=1000, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)
+    content = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         managed = False
