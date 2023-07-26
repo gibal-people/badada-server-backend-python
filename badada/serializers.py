@@ -29,3 +29,8 @@ class MbtiSerializer(ModelSerializer):
         model = Mbti
         fields = '__all__'
 
+
+class AnswerMbtiScoreSerializer(ModelSerializer):
+    class Meta:
+        model = AnswerMbtiScore
+        fields = '__all__'

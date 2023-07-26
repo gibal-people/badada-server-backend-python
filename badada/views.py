@@ -41,14 +41,67 @@ def qna(request):
 
 
 
+
 # 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
+# 답변 보내줄때 int로
+## 형식
+# {
+#     "answer" : [1,5,9,12,15,17,19,23,26,28,32,34]
+# }
+
 @api_view(['GET', 'POST'])
 def result(request):
     if request.method == 'GET':
-        data = request.data
-        print(type(data["answer"][0]))
+        answer = request.data["answer"]
+        #1. 불러온 데이터 바탕으로 어떤 mbti인지 파악 (answer_mbti_score)
+        mbti = cal_mbti(answer)
+        print(mbti)
+        #2. mbti에 매칭되는 바다 정보 찾기 (mbti)
+        #3. 바다 정보 return (beach)
+        #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
+
+
         
-        return Response({'success': True})
+        return Response(mbti)
+
+
+
+
+def cal_mbti(answer):
+    mbtiscore_data = AnswerMbtiScore.objects.all()
+    mbtiscore_serializer = AnswerMbtiScoreSerializer(mbtiscore_data, many=True)
+
+    e=0;s=0;t=0;p=0
+    for i in answer:
+        e += mbtiscore_serializer.data[i-1]["e"]
+        s += mbtiscore_serializer.data[i-1]["s"]
+        t += mbtiscore_serializer.data[i-1]["t"]
+        p += mbtiscore_serializer.data[i-1]["p"]
+
+    mbti = ""
+    # 각 타입의 유형(ei/ns/tf/jp)합은 1200
+    if e > 600 :
+        mbti = "E"
+    else :
+        mbti += "I"
+
+    if s > 600 :
+        mbti += "S" 
+    else :
+        mbti += "N"
+
+    if t > 600 :
+        mbti += "T" 
+    else :
+        mbti += "F"
+
+    if p > 600 :
+        mbti += "P" 
+    else :
+        mbti += "J"
+
+    return(mbti)
+    
 
 
 
