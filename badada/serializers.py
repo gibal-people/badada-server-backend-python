@@ -34,3 +34,9 @@ class AnswerMbtiScoreSerializer(ModelSerializer):
     class Meta:
         model = AnswerMbtiScore
         fields = '__all__'
+
+
+class BeachSerializer(ModelSerializer):
+    class Meta:
+        model = Beach
+        fields = '__all__'

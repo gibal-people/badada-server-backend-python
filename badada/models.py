@@ -222,7 +222,8 @@ class Question(models.Model):
 
 
 class UserCnt(models.Model):
-    total_user_cnt = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    total_user_cnt = models.IntegerField()
 
     class Meta:
         managed = False
