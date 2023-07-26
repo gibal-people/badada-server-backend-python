@@ -55,8 +55,12 @@ def result(request):
         answer = request.data["answer"]
         #1. 불러온 데이터 바탕으로 어떤 mbti인지 파악 (answer_mbti_score)
         mbti = cal_mbti(answer)
-        print(mbti)
+        
+
         #2. mbti에 매칭되는 바다 정보 찾기 (mbti)
+        beach = find_beach(mbti)
+        
+
         #3. 바다 정보 return (beach)
         #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
 
@@ -103,6 +107,13 @@ def cal_mbti(answer):
     return(mbti)
     
 
+def find_beach(mbti):
+    mbti_data = Mbti.objects.all()
+    mbti_serializer = MbtiSerializer(mbti_data, many=True)
+
+    beach = [item["beach"] for item in mbti_serializer.data if item["mbti"] == mbti]
+
+    return(beach)
 
 
 
