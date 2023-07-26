@@ -20,7 +20,7 @@ spec:
         image: badada-backend-image
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 8000
         envFrom:
         - secretRef:
             name: badada-backend-secret
