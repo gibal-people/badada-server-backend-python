@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: badada-backend-deployment
+  labels:
+    app: badada-backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: badada-backend-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: badada-backend-deployment
+    spec:
+      revisionHistoryLimit: 0
+      containers:
+      - name: badada-backend
+        image: badada-backend-image
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: badada-backend-secret
+        - configMapRef:
+            name: badada-backend-configmap
+      imagePullSecrets:
+      - name: regcred
