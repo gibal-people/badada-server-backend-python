@@ -24,7 +24,5 @@ spec:
         envFrom:
         - secretRef:
             name: badada-backend-secret
-        - configMapRef:
-            name: badada-backend-configmap
       imagePullSecrets:
       - name: regcred
