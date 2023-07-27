@@ -13,12 +13,23 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from utils import parse_database_config
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 load_dotenv()
+
+
+# database-config.txt 파일의 경로 (절대 경로)
+database_config_path = '/Users/dojun/gibal/badada_backend/database-config.txt'
+# database_config_path = /vault/secrets/database-config.txt
+
+# database-config.txt 파일을 파싱하여 DB_HOST 값을 가져옴
+DB_HOST = parse_database_config(database_config_path)
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -84,7 +95,8 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'), 
         'PASSWORD': os.environ.get('DB_PASS'), 
-        'HOST': os.environ.get('DB_HOST'),
+        # 'HOST': os.environ.get('DB_HOST'),
+        'HOST': DB_HOST,
         'PORT': os.environ.get('DB_PORT'),
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
