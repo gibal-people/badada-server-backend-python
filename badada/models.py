@@ -107,15 +107,15 @@ class AuthUserUserPermissions(models.Model):
 class Beach(models.Model):
     beach = models.CharField(primary_key=True, max_length=100)
     location = models.CharField(max_length=100, blank=True, null=True)
-    attribute_1 = models.CharField(max_length=1000, blank=True, null=True)
-    attribute_2 = models.CharField(max_length=1000, blank=True, null=True)
-    attribute_3 = models.CharField(max_length=1000, blank=True, null=True)
-    recommendation_1 = models.CharField(max_length=1000, blank=True, null=True)
-    recommendation_2 = models.CharField(max_length=1000, blank=True, null=True)
-    recommendation_3 = models.CharField(max_length=1000, blank=True, null=True)
-    category_1 = models.CharField(max_length=100, blank=True, null=True)
-    category_2 = models.CharField(max_length=100, blank=True, null=True)
-    category_3 = models.CharField(max_length=100, blank=True, null=True)
+    attr_1 = models.CharField(max_length=1000, blank=True, null=True)
+    attr_2 = models.CharField(max_length=1000, blank=True, null=True)
+    attr_3 = models.CharField(max_length=1000, blank=True, null=True)
+    rec_1 = models.CharField(max_length=1000, blank=True, null=True)
+    rec_2 = models.CharField(max_length=1000, blank=True, null=True)
+    rec_3 = models.CharField(max_length=1000, blank=True, null=True)
+    cat_1 = models.CharField(max_length=100, blank=True, null=True)
+    cat_2 = models.CharField(max_length=100, blank=True, null=True)
+    cat_3 = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False

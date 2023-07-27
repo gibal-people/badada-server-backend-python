@@ -133,17 +133,9 @@ def beach_info(beach):
     beach_info["beach"] = beach_serializer.data[0]["beach"]
     beach_info["location"] = beach_serializer.data[0]["location"]
 
-    beach_attr.append(beach_serializer.data[0]["attribute_1"])
-    beach_attr.append(beach_serializer.data[0]["attribute_2"])
-    beach_attr.append(beach_serializer.data[0]["attribute_3"])
-
-    beach_rec.append(beach_serializer.data[0]["recommendation_1"])
-    beach_rec.append(beach_serializer.data[0]["recommendation_2"])
-    beach_rec.append(beach_serializer.data[0]["recommendation_3"])
-
-    beach_cat.append(beach_serializer.data[0]["category_1"])
-    beach_cat.append(beach_serializer.data[0]["category_2"])
-    beach_cat.append(beach_serializer.data[0]["category_3"])
+    beach_attr = [beach_serializer.data[0][f"attr_{i}"] for i in range(1, 4)]
+    beach_rec = [beach_serializer.data[0][f"rec_{i}"] for i in range(1, 4)]
+    beach_cat = [beach_serializer.data[0][f"cat_{i}"] for i in range(1, 4)]
 
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
