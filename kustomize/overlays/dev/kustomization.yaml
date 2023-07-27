@@ -3,3 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../base
+images:
+- name: badada-backend-image
+  newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/badada-backend
+  newTag: 98e224da43e1dd404b389f4de04411acf858b4a4
