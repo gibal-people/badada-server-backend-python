@@ -14,6 +14,7 @@ spec:
       labels:
         app: badada-backend-deployment
     spec:
+      serviceAccountName: internal-app
       revisionHistoryLimit: 0
       containers:
       - name: badada-backend
