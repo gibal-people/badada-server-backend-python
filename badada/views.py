@@ -63,10 +63,13 @@ def result(request):
         result = beach_info(beach)
         
         #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
-        update_cnt(mbti)
+        user = update_cnt(mbti)
         
-        
+        result["user_cnt"] = user
+
         return Response(result)
+
+
 
 
 
@@ -122,14 +125,46 @@ def beach_info(beach):
     beach_data = Beach.objects.filter(beach=beach)
     beach_serializer = BeachSerializer(beach_data, many=True)
 
-    return(beach_serializer.data[0])
+    beach_info = {}
+    beach_attr = []
+    beach_rec = []
+    beach_cat = []
+
+    beach_info["beach"] = beach_serializer.data[0]["beach"]
+    beach_info["location"] = beach_serializer.data[0]["location"]
+
+    beach_attr.append(beach_serializer.data[0]["attribute_1"])
+    beach_attr.append(beach_serializer.data[0]["attribute_2"])
+    beach_attr.append(beach_serializer.data[0]["attribute_3"])
+
+    beach_rec.append(beach_serializer.data[0]["recommendation_1"])
+    beach_rec.append(beach_serializer.data[0]["recommendation_2"])
+    beach_rec.append(beach_serializer.data[0]["recommendation_3"])
+
+    beach_cat.append(beach_serializer.data[0]["category_1"])
+    beach_cat.append(beach_serializer.data[0]["category_2"])
+    beach_cat.append(beach_serializer.data[0]["category_3"])
+
+    beach_info["beach_attr"] = beach_attr
+    beach_info["beach_rec"] = beach_rec
+    beach_info["beach_cat"] = beach_cat
+
+    return(beach_info)
+
 
 
 # mbti 누적 수 + 1 / 전체 이용자 수 + 1
 def update_cnt(mbti):
     mbticnt_data = MbtiCnt.objects.get(mbti=mbti)
     usercnt_data = UserCnt.objects.get(id=1)
+    mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=False)
+    usercnt_serializer = UserCntSerializer(usercnt_data, many=False)
     
+    user = {} # mbti 누적 수와 전체 사용자 저장하는 변수
+    user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
+    user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
+
+
     # mbti 누적 수 + 1
     mbticnt_data.mbti_cnt += 1
     mbticnt_data.save()
@@ -138,7 +173,11 @@ def update_cnt(mbti):
     usercnt_data.total_user_cnt += 1
     usercnt_data.save()
 
-    
+
+    return(user)
+
+
+
 
 
 
