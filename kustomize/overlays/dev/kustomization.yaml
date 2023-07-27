@@ -6,4 +6,4 @@ resources:
 images:
 - name: badada-backend-image
   newName: 270112669095.dkr.ecr.ap-northeast-2.amazonaws.com/badada-backend
-  newTag: 2ddd8de67b21e126497ddbfe0e80f3cb4b9faffb
+  newTag: 2eb7345345c68a1a54be09c1ec2cbcc31f92013c
