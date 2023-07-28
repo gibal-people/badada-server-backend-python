@@ -1,3 +1,4 @@
 *.pyc
 __pycache__/
 .env
+database-config.txt

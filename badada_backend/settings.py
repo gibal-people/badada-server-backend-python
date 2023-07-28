@@ -23,11 +23,10 @@ load_dotenv()
 
 
 # database-config.txt 파일의 경로 (절대 경로)
-database_config_path = '/Users/dojun/gibal/badada_backend/database-config.txt'
-# database_config_path = /vault/secrets/database-config.txt
+database_config_path = '/vault/secrets/database-config.txt'
 
 # database-config.txt 파일을 파싱하여 DB_HOST 값을 가져옴
-DB_HOST = parse_database_config(database_config_path)
+database_data = parse_database_config(database_config_path)
 
 
 
@@ -92,12 +91,16 @@ WSGI_APPLICATION = 'badada_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'), 
-        'PASSWORD': os.environ.get('DB_PASS'), 
+        # 'NAME': os.environ.get('DB_NAME'),
+        'NAME': database_data['DB_NAME'],
+        # 'USER': os.environ.get('DB_USER'), 
+        'USER': database_data['DB_USER'],
+        # 'PASSWORD': os.environ.get('DB_PASS'), 
+        'PASSWORD': database_data['DB_PASS'],
         # 'HOST': os.environ.get('DB_HOST'),
-        'HOST': DB_HOST,
-        'PORT': os.environ.get('DB_PORT'),
+        'HOST': database_data['DB_HOST'],
+        # 'PORT': os.environ.get('DB_PORT'),
+        'PORT': database_data['DB_PORT'],
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
