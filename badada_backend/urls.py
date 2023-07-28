@@ -27,4 +27,6 @@ urlpatterns = [
     path('qna/', badada.views.qna),
     path('mbti_distribution/<str:mbti>/', badada.views.mbti_distribution),
     path('result/', badada.views.result),
+    path('image/<str:filename>/', badada.views.get_file_from_s3),
+    
 ]
