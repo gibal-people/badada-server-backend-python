@@ -40,3 +40,10 @@ class BeachSerializer(ModelSerializer):
     class Meta:
         model = Beach
         fields = '__all__'
+
+
+class FeedbackSerializer(ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = '__all__'
+

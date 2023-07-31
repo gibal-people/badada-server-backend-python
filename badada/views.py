@@ -43,7 +43,6 @@ def qna(request):
 
 
 
-
 # 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
 # 답변 보내줄때 int로
 ## 형식
@@ -51,28 +50,25 @@ def qna(request):
 #     "answer" : [1,5,9,12,15,17,19,23,26,28,32,34]
 # }
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def result(request):
-    if request.method == 'GET':
-        answer = request.data["answer"]
-        #1. 불러온 데이터 바탕으로 어떤 mbti인지 파악 (answer_mbti_score)
-        mbti = cal_mbti(answer)
-        
-        #2. mbti에 매칭되는 바다 정보 찾기 (mbti)
-        beach = find_beach(mbti)
-        
-        #3. 바다 정보 return (beach)
-        result = beach_info(beach)
-        
-        #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
-        user = update_cnt(mbti)
-        
-        result["user_cnt"] = user
+    
+    answer = request.data["answer"]
+    #1. 불러온 데이터 바탕으로 어떤 mbti인지 파악 (answer_mbti_score)
+    mbti = cal_mbti(answer)
+    
+    #2. mbti에 매칭되는 바다 정보 찾기 (mbti)
+    beach = find_beach(mbti)
+    
+    #3. 바다 정보 return (beach)
+    result = beach_info(beach)
+    
+    #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
+    user = update_cnt(mbti)
+    
+    result["user_cnt"] = user
 
-        return Response(result)
-
-
-
+    return Response(result)
 
 
 # 답변을 바탕으로 점수 계산하여 mbti 도출
@@ -146,7 +142,6 @@ def beach_info(beach):
     return(beach_info)
 
 
-
 # mbti 누적 수 + 1 / 전체 이용자 수 + 1
 def update_cnt(mbti):
     mbticnt_data = MbtiCnt.objects.get(mbti=mbti)
@@ -167,16 +162,52 @@ def update_cnt(mbti):
     usercnt_data.total_user_cnt += 1
     usercnt_data.save()
 
-
     return(user)
 
 
 
+@api_view(['POST'])
+def feedback(request):
+    # Good Feedback 
+    if request.data["feedback"] == "good":
+        feedback_data = Feedback.objects.create(
+            good = 1,
+            good_1 = request.data["choice"][0],
+            good_2 = request.data["choice"][1],
+            good_3 = request.data["choice"][2],
+            good_4 = request.data["choice"][3],
+            good_5 = request.data["choice"][4],
+            good_text = request.data["choice"][5],
 
+            bad = 0,
+            bad_1 =0,
+            bad_2 =0,
+            bad_3 =0,
+            bad_4 =0,
+            bad_5 =0,
+            bad_text=""
+        )
+    # Bad Feedback 
+    else:
+        feedback_data = Feedback.objects.create(
+            bad = 1,
+            bad_1 = request.data["choice"][0],
+            bad_2 = request.data["choice"][1],
+            bad_3 = request.data["choice"][2],
+            bad_4 = request.data["choice"][3],
+            bad_5 = request.data["choice"][4],
+            bad_text = request.data["choice"][5],
 
+            good = 0,
+            good_1 =0,
+            good_2 =0,
+            good_3 =0,
+            good_4 =0,
+            good_5 =0,
+            good_text=""
+        )
 
-
-
+    return Response("Success")
 
 
 
@@ -196,11 +227,9 @@ def mbti_distribution(request,mbti):
         mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
         user_serializer = UserCntSerializer(user_data, many=True)
       
-        
         all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
         total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
         
-
         for i in range(len(mbticnt_serializer.data)):
             all_mbti_data.data[i]["total_user_cnt"] = user_serializer.data[0]['total_user_cnt']
 
@@ -211,8 +240,6 @@ def mbti_distribution(request,mbti):
             del all_mbti_data.data[i]["mbti"]
 
         return Response(all_mbti_data.data)
-
-
 
     else:
         mbti_data = MbtiCnt.objects.filter(mbti=mbti)
@@ -225,11 +252,9 @@ def mbti_distribution(request,mbti):
 
         mbti_percent = round((mbti_cnt/total_user_cnt) * 100, 1)
         
-        
         #mbti_distribution = {}  # 없어도 되는지 확인
         mbti_distribution["mbti"] = mbti
         mbti_distribution["mbti_percent"] = mbti_percent
-
 
         return Response(mbti_distribution)
 
