@@ -1,11 +1,7 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
-from storages.backends.s3boto3 import S3Boto3Storage
-from django.http import JsonResponse
 
 
 
