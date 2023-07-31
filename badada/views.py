@@ -236,23 +236,6 @@ def mbti_distribution(request,mbti):
 
 
 
-def get_file_from_s3(request, filename):
-    # S3 버킷에 접근하기 위한 S3Boto3Storage 인스턴스 생성
-    s3 = S3Boto3Storage()
-
-    # S3 버킷의 파일 경로를 구성
-    s3_file_path = s3.url(filename)
-
-    try:
-        # S3 버킷에 있는 파일을 읽어옴
-        file_contents = s3.open(filename).read()
-        return JsonResponse({'file_contents': file_contents.decode()})
-    except FileNotFoundError:
-        return JsonResponse({'error': 'File not found'})
-
-
-
-
 
 
 

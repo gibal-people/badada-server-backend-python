@@ -22,31 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 
-# database-config.txt 파일의 경로 (절대 경로)
-database_config_path = '/vault/secrets/database-config.txt'
+# # database-config.txt 파일의 경로 (절대 경로)
+# database_config_path = '/vault/secrets/database-config.txt'
 
-# database-config.txt 파일을 파싱하여 DB_HOST 값을 가져옴
-database_data = parse_database_config(database_config_path)
-
-
-# s3 설정을 위한 변수
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = 'ap-northeast-2'
-AWS_STORAGE_BUCKET_NAME = 'badada-image'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (
-    AWS_STORAGE_BUCKET_NAME, AWS_REGION)
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_LOCATION = 'static'
-STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# # database-config.txt 파일을 파싱하여 DB_HOST 값을 가져옴
+# database_data = parse_database_config(database_config_path)
 
 
 
@@ -72,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'badada',
     'rest_framework',
-    'storages',
 ]
 
 MIDDLEWARE = [
@@ -112,16 +91,16 @@ WSGI_APPLICATION = 'badada_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': os.environ.get('DB_NAME'),
-        'NAME': database_data['DB_NAME'],
-        # 'USER': os.environ.get('DB_USER'), 
-        'USER': database_data['DB_USER'],
-        # 'PASSWORD': os.environ.get('DB_PASS'), 
-        'PASSWORD': database_data['DB_PASS'],
-        # 'HOST': os.environ.get('DB_HOST'),
-        'HOST': database_data['DB_HOST'],
-        # 'PORT': os.environ.get('DB_PORT'),
-        'PORT': database_data['DB_PORT'],
+        'NAME': os.environ.get('DB_NAME'),
+        # 'NAME': database_data['DB_NAME'],
+        'USER': os.environ.get('DB_USER'), 
+        # 'USER': database_data['DB_USER'],
+        'PASSWORD': os.environ.get('DB_PASS'), 
+        # 'PASSWORD': database_data['DB_PASS'],
+        'HOST': os.environ.get('DB_HOST'),
+        # 'HOST': database_data['DB_HOST'],
+        'PORT': os.environ.get('DB_PORT'),
+        # 'PORT': database_data['DB_PORT'],
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
