@@ -91,16 +91,18 @@ WSGI_APPLICATION = 'badada_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': os.environ.get('DB_NAME'),
+        # vault
         'NAME': database_data['DB_NAME'],
-        # 'USER': os.environ.get('DB_USER'), 
         'USER': database_data['DB_USER'],
-        # 'PASSWORD': os.environ.get('DB_PASS'), 
         'PASSWORD': database_data['DB_PASS'],
-        # 'HOST': os.environ.get('DB_HOST'),
         'HOST': database_data['DB_HOST'],
-        # 'PORT': os.environ.get('DB_PORT'),
         'PORT': database_data['DB_PORT'],
+        # .env
+        # 'NAME': os.environ.get('DB_NAME'),
+        # 'USER': os.environ.get('DB_USER'), 
+        # 'PASSWORD': os.environ.get('DB_PASS'), 
+        # 'HOST': os.environ.get('DB_HOST'),
+        # 'PORT': os.environ.get('DB_PORT'),
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
