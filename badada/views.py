@@ -219,6 +219,40 @@ def feedback(request):
 
 
 
+@api_view(['GET'])
+def rank(requst):
+    mbticnt_data = MbtiCnt.objects.all()
+    user_data = UserCnt.objects.all()
+    mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
+    user_serializer = UserCntSerializer(user_data, many=True)
+    
+
+
+    all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
+    total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
+
+    for i in range(len(mbticnt_serializer.data)):
+        all_mbti_data.data[i]["total_user_cnt"] = total_user_cnt
+
+        mbti_data = Mbti.objects.filter(mbti=all_mbti_data.data[i]["mbti"])
+        mbti_serializer = MbtiSerializer(mbti_data, many=True)
+        all_mbti_data.data[i]["beach"] = mbti_serializer.data[0]["beach"]
+
+        beach_data = Beach.objects.filter(beach=mbti_serializer.data[0]["beach"])
+        beach_serializer = BeachSerializer(beach_data, many=True)
+
+        beach_cat = [
+            beach_serializer.data[0]["cat_1"],
+            beach_serializer.data[0]["cat_2"],
+            beach_serializer.data[0]["cat_3"],
+        ]
+
+        all_mbti_data.data[i]["beach_cat"] = beach_cat
+
+        del all_mbti_data.data[i]["mbti"]
+
+    return Response(all_mbti_data.data)
+
 
 
 

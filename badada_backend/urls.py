@@ -28,4 +28,5 @@ urlpatterns = [
     path('mbti_distribution/<str:mbti>/', badada.views.mbti_distribution),
     path('result/', badada.views.result),
     path('feedback/', badada.views.feedback),
+    path('rank/',  badada.views.rank),
 ]
