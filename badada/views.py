@@ -46,9 +46,7 @@ def result(request):
     result = beach_info(beach)
     
     #4. mbti와 전체 사용자 수 update (mbti_cnt, user_cnt)
-    user = update_cnt(mbti)
-    
-    result["user_cnt"] = user
+    update_cnt(mbti)
 
     return Response(result)
 
@@ -106,13 +104,18 @@ def beach_info(beach):
     beach_serializer = BeachSerializer(beach_data, many=True)
     mbti_data = Mbti.objects.filter(beach=beach)
     mbti_serializer = MbtiSerializer(mbti_data, many=True)
+    usercnt_data = UserCnt.objects.get(id=1)
+    usercnt_serializer = UserCntSerializer(usercnt_data, many=False)
+    mbticnt_data = MbtiCnt.objects.get(mbti=mbti_serializer.data[0]["mbti"])
+    mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=False)
+
 
     beach_info = {}
     beach_attr = []
     beach_rec = []
     beach_cat = []
     bad_beach = ""
-
+    user = {}     # mbti 누적 수와 전체 사용자 저장하는 변수
 
     beach_info["beach"] = beach_serializer.data[0]["beach"]
     beach_info["location"] = beach_serializer.data[0]["location"]
@@ -126,12 +129,15 @@ def beach_info(beach):
     bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
     bad_beach_serializer = MbtiSerializer(bad_beach_data, many=True)
     bad_beach = bad_beach_serializer.data[0]["beach"]
+    user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
+    user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
     beach_info["beach_cat"] = beach_cat
     beach_info["bad_beach"] = bad_beach
-
+    beach_info["user_cnt"] = user
+    
 
     return(beach_info)
 
@@ -140,12 +146,6 @@ def beach_info(beach):
 def update_cnt(mbti):
     mbticnt_data = MbtiCnt.objects.get(mbti=mbti)
     usercnt_data = UserCnt.objects.get(id=1)
-    mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=False)
-    usercnt_serializer = UserCntSerializer(usercnt_data, many=False)
-    
-    user = {} # mbti 누적 수와 전체 사용자 저장하는 변수
-    user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
-    user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
 
     # mbti 누적 수 + 1
@@ -156,7 +156,7 @@ def update_cnt(mbti):
     usercnt_data.total_user_cnt += 1
     usercnt_data.save()
 
-    return(user)
+    return()
 
 
 
@@ -248,43 +248,15 @@ def rank(requst):
 # request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
 # 바다, 전체 유저수, mbti 누적 수 response
 @api_view(['GET'])
-def mbti_distribution(request,mbti):
-    if mbti == "all":
-        mbticnt_data = MbtiCnt.objects.all()
-        user_data = UserCnt.objects.all()
-        mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
-        user_serializer = UserCntSerializer(user_data, many=True)
-      
-        all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
-        total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
-        
-        for i in range(len(mbticnt_serializer.data)):
-            all_mbti_data.data[i]["total_user_cnt"] = user_serializer.data[0]['total_user_cnt']
+def beach(request,mbti):
+    print("****************")
+    print(mbti)
+    mbti_data = Mbti.objects.filter(mbti=mbti)
+    mbti_serializer = MbtiSerializer(mbti_data, many=False)
+    print("****************")
 
-            mbti_data = Mbti.objects.filter(mbti=all_mbti_data.data[i]["mbti"])
-            mbti_serializer = MbtiSerializer(mbti_data, many=True)
-            all_mbti_data.data[i]["beach"] = mbti_serializer.data[0]["beach"]
-
-            del all_mbti_data.data[i]["mbti"]
-
-        return Response(all_mbti_data.data)
-
-    else:
-        mbti_data = MbtiCnt.objects.filter(mbti=mbti)
-        user_data = UserCnt.objects.all()
-        mbti_serializer = MbtiCntSerializer(mbti_data, many=True)
-        user_serializer = UserCntSerializer(user_data, many=True)
-        
-        mbti_cnt = mbti_serializer.data[0]['mbti_cnt']
-        total_user_cnt = user_serializer.data[0]['total_user_cnt']
-
-        mbti_percent = round((mbti_cnt/total_user_cnt) * 100, 1)
-        
-        #mbti_distribution = {}  # 없어도 되는지 확인
-        mbti_distribution["mbti"] = mbti
-        mbti_distribution["mbti_percent"] = mbti_percent
-
-        return Response(mbti_distribution)
+    bad_mbti = mbti_serializer.data[0]["bad_mbti"]
+    return Response(bad_mbti)
 
 
 
