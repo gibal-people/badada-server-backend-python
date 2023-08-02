@@ -11,18 +11,6 @@ spec:
   replicas: 1
   template:
     metadata:
-      annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'internal-app'
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
-        vault.hashicorp.com/agent-inject-template-database-config.txt: |
-           {{- with secret "internal/data/database/config" -}}
-            DB_HOST: {{ .Data.data.DB_HOST }}
-           DB_NAME: {{ .Data.data.DB_NAME }}
-           DB_PASS: {{ .Data.data.DB_PASS }}
-           DB_PORT: {{ .Data.data.DB_PORT }}
-           DB_USER: {{ .Data.data.DB_USER }}
-           {{- end -}}
       labels:
         app: badada-backend-deployment
     spec:
