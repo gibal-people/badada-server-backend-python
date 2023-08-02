@@ -6,20 +6,6 @@ from .serializers import *
 
 
 @api_view(['GET'])
-def question(request):
-    data = Question.objects.all()
-    serializer = QuestionSerializer(data, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def answer(request):
-    data = Answer.objects.all()
-    serializer = AnswerSerializer(data, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
 def qna(request):
     question_data = Question.objects.all()
     answer_data = Answer.objects.all()
