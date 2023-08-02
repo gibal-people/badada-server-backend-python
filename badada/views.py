@@ -118,11 +118,15 @@ def find_beach(mbti):
 def beach_info(beach):
     beach_data = Beach.objects.filter(beach=beach)
     beach_serializer = BeachSerializer(beach_data, many=True)
+    mbti_data = Mbti.objects.filter(beach=beach)
+    mbti_serializer = MbtiSerializer(mbti_data, many=True)
 
     beach_info = {}
     beach_attr = []
     beach_rec = []
     beach_cat = []
+    bad_beach = ""
+
 
     beach_info["beach"] = beach_serializer.data[0]["beach"]
     beach_info["location"] = beach_serializer.data[0]["location"]
@@ -131,9 +135,17 @@ def beach_info(beach):
     beach_rec = [beach_serializer.data[0][f"rec_{i}"] for i in range(1, 4)]
     beach_cat = [beach_serializer.data[0][f"cat_{i}"] for i in range(1, 4)]
 
+
+    bad_mbti = mbti_serializer.data[0]["bad_mbti"]
+    bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
+    bad_beach_serializer = MbtiSerializer(bad_beach_data, many=True)
+    bad_beach = bad_beach_serializer.data[0]["beach"]
+
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
     beach_info["beach_cat"] = beach_cat
+    beach_info["bad_beach"] = bad_beach
+
 
     return(beach_info)
 

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from utils import parse_database_config
+from utils import parse_secret
 
 
 
@@ -25,8 +25,15 @@ load_dotenv()
 # database-config.txt 파일의 경로 (절대 경로)
 database_config_path = '/vault/secrets/database-config.txt'
 
-# database-config.txt 파일을 파싱하여 DB_HOST 값을 가져옴
-database_data = parse_database_config(database_config_path)
+# database-config.txt 파일을 파싱하여 값을 가져옴
+database_data = parse_secret(database_config_path)
+
+
+# # django-secret.txt 파일의 경로 (절대 경로)
+# django_secret_path = '/vault/secrets/django-secret.txt'
+
+# # django-secret.txt 파일을 파싱하여 값을 가져옴
+# django_secret = parse_secret(django_secret_path)
 
 
 
@@ -35,6 +42,7 @@ database_data = parse_database_config(database_config_path)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-0x@uio9zw6pwawn=82eky3ga)p2(ipmzpmo7chpmx4xowl9d_s'
+# SECRET_KEY = database_data['django_secret']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
