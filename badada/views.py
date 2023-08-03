@@ -134,6 +134,7 @@ def beach_info(beach):
     user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
+    beach_info["mbti"] = mbticnt_serializer.data["mbti"]
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
     beach_info["beach_cat"] = beach_cat
@@ -236,7 +237,6 @@ def rank(requst):
 
         all_mbti_data.data[i]["beach_cat"] = beach_cat
 
-        del all_mbti_data.data[i]["mbti"]
 
     return Response(all_mbti_data.data)
 
