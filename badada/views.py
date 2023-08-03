@@ -114,7 +114,6 @@ def beach_info(beach):
     beach_attr = []
     beach_rec = []
     beach_cat = []
-    bad_beach = ""
     user = {}     # mbti 누적 수와 전체 사용자 저장하는 변수
 
     beach_info["beach"] = beach_serializer.data[0]["beach"]
@@ -128,7 +127,10 @@ def beach_info(beach):
     bad_mbti = mbti_serializer.data[0]["bad_mbti"]
     bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
     bad_beach_serializer = MbtiSerializer(bad_beach_data, many=True)
-    bad_beach = bad_beach_serializer.data[0]["beach"]
+    bad_beach = [
+        bad_beach_serializer.data[0]["beach"],
+        bad_beach_serializer.data[0]["mbti"],
+    ]
     user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
