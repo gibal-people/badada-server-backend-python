@@ -8,16 +8,19 @@ from .serializers import *
 @api_view(['GET'])
 def qna(request):
     question_data = Question.objects.all()
-    answer_data = Answer.objects.all()
     question_serializer = QuestionSerializer(question_data, many=True)
-    answer_serializer = AnswerSerializer(answer_data, many=True)
-
+    
     qna_serializer = question_serializer
 
     for i in range(len(qna_serializer.data)):
-        qna_serializer.data[i]["answer"]= answer_serializer.data[i]
-        del qna_serializer.data[i]["answer"]["question_num"]
-
+        answer_data = Answer.objects.filter(question_num=i+1)
+        answer_serializer = AnswerSerializer(answer_data, many=True)
+        qna_serializer.data[i]["answer"] = []
+        
+        for j in range(len(answer_serializer.data)):
+            answer_data_tmp = answer_serializer.data[j]
+            del answer_data_tmp["question_num"]
+            qna_serializer.data[i]["answer"].append(answer_data_tmp)
 
     return Response(qna_serializer.data)
 
