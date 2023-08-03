@@ -211,7 +211,6 @@ def rank(requst):
     user_data = UserCnt.objects.all()
     mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
     user_serializer = UserCntSerializer(user_data, many=True)
-    
 
 
     all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
@@ -243,20 +242,13 @@ def rank(requst):
 
 
 
-
-# 상위 몇프로
-# request시, mbti 있으면 해당 mbti에 대해서 all이면 전체 리스트(내림차순)
-# 바다, 전체 유저수, mbti 누적 수 response
 @api_view(['GET'])
 def beach(request,mbti):
-    print("****************")
-    print(mbti)
-    mbti_data = Mbti.objects.filter(mbti=mbti)
+    mbti_data = Mbti.objects.get(mbti=mbti)
     mbti_serializer = MbtiSerializer(mbti_data, many=False)
-    print("****************")
 
-    bad_mbti = mbti_serializer.data[0]["bad_mbti"]
-    return Response(bad_mbti)
+    result = beach_info(mbti_serializer.data["beach"])
+    return Response(result)
 
 
 
