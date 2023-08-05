@@ -111,7 +111,8 @@ def beach_info(beach):
     usercnt_serializer = UserCntSerializer(usercnt_data, many=False)
     mbticnt_data = MbtiCnt.objects.get(mbti=mbti_serializer.data[0]["mbti"])
     mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=False)
-
+    rank_data = MbtiCnt.objects.all().order_by("-mbti_cnt")
+    rank_data_serializer = MbtiCntSerializer(rank_data, many=True)
 
     beach_info = {}
     beach_attr = []
@@ -137,13 +138,21 @@ def beach_info(beach):
     user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
+    mbti_rank = 0
+    for i in range(len(rank_data_serializer.data)):
+        mbti_rank += 1
+        if rank_data_serializer.data[i]["mbti"] == mbti_serializer.data[0]["mbti"]:
+            break
+        
+    
+
     beach_info["mbti"] = mbticnt_serializer.data["mbti"]
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
     beach_info["beach_cat"] = beach_cat
     beach_info["bad_beach"] = bad_beach
     beach_info["user_cnt"] = user
-    
+    beach_info["rank"] = mbti_rank
 
     return(beach_info)
 
@@ -213,11 +222,10 @@ def feedback(request):
 
 @api_view(['GET'])
 def rank(requst):
-    mbticnt_data = MbtiCnt.objects.all()
+    mbticnt_data = MbtiCnt.objects.all().order_by("-mbti_cnt")
     user_data = UserCnt.objects.all()
     mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
     user_serializer = UserCntSerializer(user_data, many=True)
-
 
     all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
     total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
