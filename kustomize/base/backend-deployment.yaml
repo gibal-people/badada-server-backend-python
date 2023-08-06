@@ -34,8 +34,5 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
-        envFrom:
-        - secretRef:
-            name: badada-backend-secret
       imagePullSecrets:
       - name: regcred
