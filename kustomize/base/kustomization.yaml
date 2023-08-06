@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
 - backend-deployment.yaml
 - backend-service.yaml
-- backend-secret.yaml
