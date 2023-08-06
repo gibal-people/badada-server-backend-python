@@ -1,4 +1,4 @@
-# Node.js
+# python
 FROM python:3.11.4
 
 # /app 디렉토리 생성
