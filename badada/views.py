@@ -135,7 +135,7 @@ def beach_info(beach):
         bad_beach_serializer.data[0]["beach"],
         bad_beach_serializer.data[0]["mbti"],
     ]
-    user["mbit_cnt"] = mbticnt_serializer.data["mbti_cnt"]
+    user["mbti_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
     mbti_rank = 0
