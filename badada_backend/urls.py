@@ -23,7 +23,7 @@ import badada.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('qna/', badada.views.qna),
-    path('mbti/<str:mbti>/', badada.views.beach),
+    path('beach/<str:beach>/', badada.views.beach),
     path('result/', badada.views.result),
     path('feedback/', badada.views.feedback),
     path('rank/',  badada.views.rank),

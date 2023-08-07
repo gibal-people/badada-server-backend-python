@@ -22,11 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 
-# database-config.txt 파일의 경로 (절대 경로)
-database_config_path = '/vault/secrets/database-config.txt'
+# # database-config.txt 파일의 경로 (절대 경로)
+# database_config_path = '/vault/secrets/database-config.txt'
 
-# database-config.txt 파일을 파싱하여 값을 가져옴
-database_data = parse_secret(database_config_path)
+# # database-config.txt 파일을 파싱하여 값을 가져옴
+# database_data = parse_secret(database_config_path)
 
 
 # # django-secret.txt 파일의 경로 (절대 경로)
@@ -100,17 +100,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # vault
-        'NAME': database_data['DB_NAME'],
-        'USER': database_data['DB_USER'],
-        'PASSWORD': database_data['DB_PASS'],
-        'HOST': database_data['DB_HOST'],
-        'PORT': database_data['DB_PORT'],
+        # 'NAME': database_data['DB_NAME'],
+        # 'USER': database_data['DB_USER'],
+        # 'PASSWORD': database_data['DB_PASS'],
+        # 'HOST': database_data['DB_HOST'],
+        # 'PORT': database_data['DB_PORT'],
         # .env
-        # 'NAME': os.environ.get('DB_NAME'),
-        # 'USER': os.environ.get('DB_USER'), 
-        # 'PASSWORD': os.environ.get('DB_PASS'), 
-        # 'HOST': os.environ.get('DB_HOST'),
-        # 'PORT': os.environ.get('DB_PORT'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'), 
+        'PASSWORD': os.environ.get('DB_PASS'), 
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }

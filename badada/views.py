@@ -131,11 +131,13 @@ def beach_info(beach):
     bad_mbti = mbti_serializer.data[0]["bad_mbti"]
     bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
     bad_beach_serializer = MbtiSerializer(bad_beach_data, many=True)
-    ## 여기 수정!!!
-    ## mbti 대신 바다 이름 영어로
+    
+    bad_beach_eng_data = Beach.objects.filter(mbti=bad_mbti)
+    bad_beach_eng_serializer = BeachSerializer(bad_beach_eng_data, many=True)
+    
     bad_beach = [
         bad_beach_serializer.data[0]["beach"],
-        bad_beach_serializer.data[0]["mbti"],
+        bad_beach_eng_serializer.data[0]["beach_eng"],
     ]
     user["mbti_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
@@ -148,9 +150,7 @@ def beach_info(beach):
             break
         
     
-    ## 여기 수정!!
-    ## mbti 대신 바다 이름 영어로
-    beach_info["mbti"] = mbticnt_serializer.data["mbti"]
+    beach_info["beach_eng"] = beach_serializer.data[0]["beach_eng"]
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
     beach_info["beach_cat"] = beach_cat
@@ -231,15 +231,14 @@ def rank(requst):
     mbticnt_serializer = MbtiCntSerializer(mbticnt_data, many=True)
     user_serializer = UserCntSerializer(user_data, many=True)
 
-    all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
+    all_mbti_data = mbticnt_serializer      
+    
+    # beach, mbti_cnt,total_user 정보를 포함하는 변수
     total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
 
-    ## 여기 수정!!
-    ## all_mbti_data에 포함된 mbti 빼고 바다 영어이름 추가
 
     for i in range(len(mbticnt_serializer.data)):
         all_mbti_data.data[i]["total_user_cnt"] = total_user_cnt
-
         mbti_data = Mbti.objects.filter(mbti=all_mbti_data.data[i]["mbti"])
         mbti_serializer = MbtiSerializer(mbti_data, many=True)
         all_mbti_data.data[i]["beach"] = mbti_serializer.data[0]["beach"]
@@ -252,9 +251,14 @@ def rank(requst):
             beach_serializer.data[0]["cat_2"],
             beach_serializer.data[0]["cat_3"],
         ]
+        
+        beach_eng = beach_serializer.data[0]["beach_eng"]
 
         all_mbti_data.data[i]["beach_cat"] = beach_cat
-
+        all_mbti_data.data[i]["beach_eng"] = beach_eng
+        
+        # mbti 내용 필요 x
+        del all_mbti_data.data[i]["mbti"]
 
     return Response(all_mbti_data.data)
 
@@ -263,11 +267,11 @@ def rank(requst):
 
 
 @api_view(['GET'])
-def beach(request,mbti):
-    mbti_data = Mbti.objects.get(mbti=mbti)
-    mbti_serializer = MbtiSerializer(mbti_data, many=False)
+def beach(request,beach):
+    beach_data = Beach.objects.filter(beach_eng=beach)
+    beach_serializer = BeachSerializer(beach_data, many=True)
 
-    result = beach_info(mbti_serializer.data["beach"])
+    result = beach_info(beach_serializer.data[0]["beach"])
     return Response(result)
 
 

@@ -106,6 +106,7 @@ class AuthUserUserPermissions(models.Model):
 
 class Beach(models.Model):
     beach = models.CharField(primary_key=True, max_length=100)
+    beach_eng = models.CharField(max_length=100)
     location = models.CharField(max_length=100, blank=True, null=True)
     attr_1 = models.CharField(max_length=1000, blank=True, null=True)
     attr_2 = models.CharField(max_length=1000, blank=True, null=True)
