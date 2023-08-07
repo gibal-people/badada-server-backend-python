@@ -131,6 +131,8 @@ def beach_info(beach):
     bad_mbti = mbti_serializer.data[0]["bad_mbti"]
     bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
     bad_beach_serializer = MbtiSerializer(bad_beach_data, many=True)
+    ## 여기 수정!!!
+    ## mbti 대신 바다 이름 영어로
     bad_beach = [
         bad_beach_serializer.data[0]["beach"],
         bad_beach_serializer.data[0]["mbti"],
@@ -138,6 +140,7 @@ def beach_info(beach):
     user["mbti_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
+    # 내림차순으로 정렬한 후, 위에서부터 몇 번째인지 구하기
     mbti_rank = 0
     for i in range(len(rank_data_serializer.data)):
         mbti_rank += 1
@@ -145,7 +148,8 @@ def beach_info(beach):
             break
         
     
-
+    ## 여기 수정!!
+    ## mbti 대신 바다 이름 영어로
     beach_info["mbti"] = mbticnt_serializer.data["mbti"]
     beach_info["beach_attr"] = beach_attr
     beach_info["beach_rec"] = beach_rec
@@ -219,7 +223,7 @@ def feedback(request):
     return Response("Success")
 
 
-
+# 전체 바다 순위
 @api_view(['GET'])
 def rank(requst):
     mbticnt_data = MbtiCnt.objects.all().order_by("-mbti_cnt")
@@ -229,6 +233,9 @@ def rank(requst):
 
     all_mbti_data = mbticnt_serializer                              # beach, mbti_cnt,total_user 정보를 포함하는 변수
     total_user_cnt = user_serializer.data[0]['total_user_cnt'] 
+
+    ## 여기 수정!!
+    ## all_mbti_data에 포함된 mbti 빼고 바다 영어이름 추가
 
     for i in range(len(mbticnt_serializer.data)):
         all_mbti_data.data[i]["total_user_cnt"] = total_user_cnt
