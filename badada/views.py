@@ -5,6 +5,7 @@ from .serializers import *
 
 
 
+# 질문 & 답변
 @api_view(['GET'])
 def qna(request):
     question_data = Question.objects.all()
@@ -28,9 +29,9 @@ def qna(request):
 
 
 
-# 답변 기반으로 추천하는 바다/카테고리/바다 설명/추천하는 이유/나와 맞지 않는 바다 response
-# 답변 보내줄때 int로
-## 형식
+# 질문에 대한 답변을 req body로 받으면 해당 내용을 바탕으로 결과 response
+
+## body 형식
 # {
 #     "answer" : [1,5,9,12,15,17,19,23,26,28,32,34]
 # }
@@ -101,7 +102,7 @@ def find_beach(mbti):
     return(beach[0])
 
 
-# 바다 정보
+# 바다 정보 
 def beach_info(beach):
     beach_data = Beach.objects.filter(beach=beach)
     beach_serializer = BeachSerializer(beach_data, many=True)
@@ -114,10 +115,10 @@ def beach_info(beach):
     rank_data = MbtiCnt.objects.all().order_by("-mbti_cnt")
     rank_data_serializer = MbtiCntSerializer(rank_data, many=True)
 
-    beach_info = {}
-    beach_attr = []
-    beach_rec = []
-    beach_cat = []
+    beach_info = {} # 바다 정보 저장
+    beach_attr = [] # 바다 특징
+    beach_rec = []  # 바다 추천 이유
+    beach_cat = []  # 바다 카테고리
     user = {}     # mbti 누적 수와 전체 사용자 저장하는 변수
 
     beach_info["beach"] = beach_serializer.data[0]["beach"]
@@ -126,7 +127,6 @@ def beach_info(beach):
     beach_attr = [beach_serializer.data[0][f"attr_{i}"] for i in range(1, 4)]
     beach_rec = [beach_serializer.data[0][f"rec_{i}"] for i in range(1, 4)]
     beach_cat = [beach_serializer.data[0][f"cat_{i}"] for i in range(1, 4)]
-
 
     bad_mbti = mbti_serializer.data[0]["bad_mbti"]
     bad_beach_data = Mbti.objects.filter(mbti=bad_mbti)
@@ -142,7 +142,8 @@ def beach_info(beach):
     user["mbti_cnt"] = mbticnt_serializer.data["mbti_cnt"]
     user["total_user_cnt"] = usercnt_serializer.data["total_user_cnt"]
 
-    # 내림차순으로 정렬한 후, 위에서부터 몇 번째인지 구하기
+
+    # 내림차순으로 정렬한 후, 바다가 몇 번째 순위인지 구하기
     mbti_rank = 0
     for i in range(len(rank_data_serializer.data)):
         mbti_rank += 1
@@ -178,6 +179,12 @@ def update_cnt(mbti):
     return()
 
 
+# 피드백 정보 디비에 저장
+## body 형식
+# {
+#     "feedback" : "bad",
+#     "choice" : [1,1,1,1,1,"bad"]
+# }
 
 @api_view(['POST'])
 def feedback(request):
@@ -265,7 +272,8 @@ def rank(requst):
 
 
 
-
+# 특정 바다 정보
+# 결과 화면에서 보여주는 내용과 동일
 @api_view(['GET'])
 def beach(request,beach):
     beach_data = Beach.objects.filter(beach_eng=beach)
