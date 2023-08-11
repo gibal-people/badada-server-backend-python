@@ -29,20 +29,13 @@ database_config_path = '/vault/secrets/database-config.txt'
 database_data = parse_secret(database_config_path)
 
 
-# # django-secret.txt 파일의 경로 (절대 경로)
-# django_secret_path = '/vault/secrets/django-secret.txt'
-
-# # django-secret.txt 파일을 파싱하여 값을 가져옴
-# django_secret = parse_secret(django_secret_path)
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0x@uio9zw6pwawn=82eky3ga)p2(ipmzpmo7chpmx4xowl9d_s'
-# SECRET_KEY = database_data['django_secret']
+SECRET_KEY = os.environ.get('SECRET_KEY') 
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
